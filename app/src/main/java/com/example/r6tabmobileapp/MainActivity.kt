@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext, "Please Enter A Password", Toast.LENGTH_SHORT).show()
             }
 
-            else if (userEmail == "coleetucker@gmail.com" && userPassword == "Password") {
+            else if (userEmail == "admin" && userPassword == "password") {
                val userDash = Intent(this, dashboard::class.java)
                    startActivity(userDash)
             }
