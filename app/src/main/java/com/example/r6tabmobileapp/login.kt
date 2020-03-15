@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Toast
+import com.example.r6tabmobileapp.ui.dashboard
 import kotlinx.android.synthetic.main.activity_login.*
 
 class MainActivity : AppCompatActivity() {

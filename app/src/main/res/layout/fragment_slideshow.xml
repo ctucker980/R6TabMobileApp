@@ -15,6 +15,12 @@
         android:contentDescription="@string/r6tablogo"
         app:srcCompat="@drawable/logoimg" />
 
+    <SearchView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_weight="1" />
+
     <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,24 +30,24 @@
 
         <TextView
             android:id="@+id/textView2"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Plateform:"
-            android:textSize="24sp" />
+            android:textSize="20dp" />
 
         <RadioButton
             android:id="@+id/pc_RadioButton"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="PC"
-            android:textSize="24sp" />
+            android:textSize="20dp" />
 
         <RadioButton
             android:id="@+id/xbox_radioButton2"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Xbox"
-            android:textSize="24sp" />
+            android:textSize="20dp" />
 
         <RadioButton
             android:id="@+id/psn_radioButton3"
@@ -49,13 +55,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="PSN"
-            android:textSize="24sp" />
+            android:textSize="20dp" />
 
     </RadioGroup>
 
-    <SearchView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/users_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1" />
 
 </LinearLayout>
