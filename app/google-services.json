@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "407256580124",
+    "firebase_url": "https://r6tabmobileapp.firebaseio.com",
+    "project_id": "r6tabmobileapp",
+    "storage_bucket": "r6tabmobileapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:407256580124:android:63e131536a22bd82e25fd9",
+        "android_client_info": {
+          "package_name": "com.example.r6tabmobileapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "407256580124-30urt4sprs25nbqp2j5d214haugha16f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaj0rtFOn3gTaovYZfwf3tJlbfky0CntM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "407256580124-30urt4sprs25nbqp2j5d214haugha16f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

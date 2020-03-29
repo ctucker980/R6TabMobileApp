@@ -1,4 +1,4 @@
-package com.example.r6tabmobileapp.ui.tools
+package com.example.r6tabmobileapp.ui.settings
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,22 +9,20 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.r6tabmobileapp.MainActivity
 import com.example.r6tabmobileapp.R
-import com.example.r6tabmobileapp.ui.dashboard
-import kotlinx.android.synthetic.main.fragment_tools.*
-import kotlinx.android.synthetic.main.fragment_tools.view.*
+import kotlinx.android.synthetic.main.fragment_settings.view.*
 
-class ToolsFragment : Fragment() {
+class SettingsFragment : Fragment() {
 
-    private lateinit var toolsViewModel: ToolsViewModel
+    private lateinit var settingsViewModel: SettingsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        toolsViewModel =
-            ViewModelProviders.of(this).get(ToolsViewModel::class.java)
-        val view : View = inflater.inflate(R.layout.fragment_tools, container, false)
+        settingsViewModel =
+            ViewModelProviders.of(this).get(SettingsViewModel::class.java)
+        val view : View = inflater.inflate(R.layout.fragment_settings, container, false)
 
         view.signout_button.setOnClickListener {
             val intent = Intent (activity, MainActivity::class.java)

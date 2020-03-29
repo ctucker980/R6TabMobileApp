@@ -1,4 +1,4 @@
-package com.example.r6tabmobileapp.ui.gallery
+package com.example.r6tabmobileapp.ui.favorites
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,17 +8,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.r6tabmobileapp.R
 
-class GalleryFragment : Fragment() {
+class FavoritesFragment : Fragment() {
 
-    private lateinit var galleryViewModel: GalleryViewModel
+    private lateinit var favoritesViewModel: FavoritesViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        galleryViewModel =
-            ViewModelProviders.of(this).get(GalleryViewModel::class.java)
-        return inflater.inflate(R.layout.fragment_gallery, container, false)
+        favoritesViewModel =
+            ViewModelProviders.of(this).get(FavoritesViewModel::class.java)
+        return inflater.inflate(R.layout.fragment_favorites, container, false)
     }
 }

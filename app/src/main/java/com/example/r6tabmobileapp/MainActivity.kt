@@ -52,5 +52,10 @@ class MainActivity : AppCompatActivity() {
         Forgot_Password_Button.setOnClickListener {
             //val forgotPasswordNav = Intent (this, )
         }
+
+        Sign_Up_Button.setOnClickListener {
+            val userSignUp = Intent (this, CreateUser::class.java)
+            startActivity(userSignUp)
+        }
     }
 }

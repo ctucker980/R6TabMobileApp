@@ -1,4 +1,4 @@
-package com.example.r6tabmobileapp.ui.slideshow
+package com.example.r6tabmobileapp.ui.search
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,18 +8,18 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.r6tabmobileapp.R
 // Search Method
-class SlideshowFragment : Fragment() {
+class SearchFragment : Fragment() {
 
-    private lateinit var slideshowViewModel: SlideshowViewModel
+    private lateinit var searchViewModel: SearchViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        slideshowViewModel =
-            ViewModelProviders.of(this).get(SlideshowViewModel::class.java)
+        searchViewModel =
+            ViewModelProviders.of(this).get(SearchViewModel::class.java)
 
-        return inflater.inflate(R.layout.fragment_slideshow, container, false)
+        return inflater.inflate(R.layout.fragment_search, container, false)
     }
 }
