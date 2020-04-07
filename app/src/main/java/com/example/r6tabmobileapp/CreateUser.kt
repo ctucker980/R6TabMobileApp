@@ -37,7 +37,7 @@ class CreateUser : AppCompatActivity() {
         var email = userEmail.text.toString()
         var password = userPassword.text.toString()
 
-        if (!email.isEmpty() && !password.isEmpty()) {
+        if (email.isNotEmpty() && password.isNotEmpty()) {
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
@@ -48,7 +48,6 @@ class CreateUser : AppCompatActivity() {
                         Toast.makeText(this, "Authentication failed", Toast.LENGTH_SHORT).show()
                     }
                 }
-
         } else { Toast.makeText(this, "Please Enter Valid Email & Password", Toast.LENGTH_SHORT).show() }
     }
 

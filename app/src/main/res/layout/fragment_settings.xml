@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/account_Button"
         android:layout_width="158dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

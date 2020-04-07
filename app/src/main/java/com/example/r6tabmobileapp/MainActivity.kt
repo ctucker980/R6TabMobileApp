@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         var email = emailText.text.toString()
         var password = passwordText.text.toString()
 
-        if (!email.isEmpty() && !password.isEmpty()) {
+        if (email.isNotEmpty() && password.isNotEmpty()) {
             mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener (this,
                 OnCompleteListener { task ->
                     if (task.isSuccessful) {
