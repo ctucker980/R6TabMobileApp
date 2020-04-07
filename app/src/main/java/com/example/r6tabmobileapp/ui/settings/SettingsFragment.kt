@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.r6tabmobileapp.MainActivity
 import com.example.r6tabmobileapp.R
+import com.firebase.ui.auth.AuthUI
 import kotlinx.android.synthetic.main.fragment_settings.view.*
 
 class SettingsFragment : Fragment() {
@@ -25,10 +26,18 @@ class SettingsFragment : Fragment() {
         val view : View = inflater.inflate(R.layout.fragment_settings, container, false)
 
         view.signout_button.setOnClickListener {
-            val intent = Intent (activity, MainActivity::class.java)
-            startActivity(intent)
+            signOut()
         }
         return view
     }
 
+    private fun signOut() {
+        AuthUI.getInstance()
+            .signOut(this.requireActivity())
+            .addOnCompleteListener {
+                val intent = Intent (activity, MainActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }
+    }
 }

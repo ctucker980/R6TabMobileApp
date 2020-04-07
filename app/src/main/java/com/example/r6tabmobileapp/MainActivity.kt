@@ -27,15 +27,23 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-    val mAuth = FirebaseAuth.getInstance()
+    private lateinit var  mAuth : FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        mAuth = FirebaseAuth.getInstance()
         Login_Button.setOnClickListener {
             login()
         }
+    }
+
+    public override fun onStart() {
+        super.onStart()
+        // Check if user is signed in (non-null) and update UI accordingly.
+        val currentUser = mAuth.currentUser
+        updateUI(currentUser)
     }
 
 
@@ -50,7 +58,9 @@ class MainActivity : AppCompatActivity() {
             mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener (this,
                 OnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        startActivity(Intent(this, dashboard::class.java))
+                        val intent = Intent(this, dashboard::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                        startActivity(intent)
                         Toast.makeText(this, "Successfully Logged In", Toast.LENGTH_SHORT).show()
                     } else {
                         Toast.makeText(this, "Please Enter Valid Email & Password", Toast.LENGTH_SHORT).show()
@@ -62,6 +72,14 @@ class MainActivity : AppCompatActivity() {
 
         if (TextUtils.isEmpty(emailText.text)) { emailText.error = "This Field Must Not Be Empty" }
         if (TextUtils.isEmpty(passwordText.text)){ passwordText.error = "This Field Must Not Be Empty" }
+    }
+
+
+
+    private fun updateUI(user: FirebaseUser?) {
+        if (user != null) {
+            startActivity(Intent(this, dashboard::class.java))
+        }
     }
 
 }
