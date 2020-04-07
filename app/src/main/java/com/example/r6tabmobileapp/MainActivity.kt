@@ -37,6 +37,11 @@ class MainActivity : AppCompatActivity() {
         Login_Button.setOnClickListener {
             login()
         }
+
+        Sign_Up_Button.setOnClickListener {
+            val intent = Intent(this, CreateUser::class.java)
+            startActivity(intent)
+        }
     }
 
     public override fun onStart() {

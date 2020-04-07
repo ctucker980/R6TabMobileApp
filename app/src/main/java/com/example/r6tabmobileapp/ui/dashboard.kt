@@ -11,7 +11,10 @@ import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.view.Menu
+import android.view.View
+import android.widget.TextView
 import com.example.r6tabmobileapp.R
+import com.google.firebase.auth.FirebaseAuth
 
 class dashboard : AppCompatActivity() {
 
@@ -22,6 +25,7 @@ class dashboard : AppCompatActivity() {
         setContentView(R.layout.activity_dashboard)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
@@ -44,6 +48,12 @@ class dashboard : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
+        val user = FirebaseAuth.getInstance().currentUser
+        user?.let {
+            val userEmail : TextView = findViewById(R.id.email)
+            val email = user.email
+            userEmail.text = email
+        }
         menuInflater.inflate(R.menu.dashboard, menu)
         return true
     }
