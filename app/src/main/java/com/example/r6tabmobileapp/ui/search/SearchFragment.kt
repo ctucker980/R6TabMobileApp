@@ -1,7 +1,6 @@
 package com.example.r6tabmobileapp.ui.search
 
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,15 +9,16 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.r6tabmobileapp.R
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonObject
-import com.google.gson.reflect.TypeToken
+import com.google.gson.*
+import com.google.gson.annotations.SerializedName
+import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.fragment_search.view.*
+import kotlinx.android.synthetic.main.fragment_search.view.result_TextView
 import okhttp3.*
-import org.json.JSONObject
 import java.io.IOException
 import java.lang.reflect.Type
+import java.util.*
+
 
 // Search Method
 class SearchFragment : Fragment() {
@@ -37,7 +37,6 @@ class SearchFragment : Fragment() {
             ViewModelProviders.of(this).get(SearchViewModel::class.java)
 
         val view = inflater.inflate(R.layout.fragment_search, container, false)
-        val T = view.findViewById<View>(R.id.result_TextView) as TextView
         view.search_View.setOnQueryTextListener( object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 fectchJson(query.toString())
@@ -70,14 +69,28 @@ class SearchFragment : Fragment() {
                 val gson = GsonBuilder().create()
                 val homeFeed = gson.fromJson(body, HomeFeed::class.java)
 
-                val player = homeFeed?.players?.toString()
-                val playersTest = gson.fromJson(player, PlayersFeed::class.java)
+                val getFirstKey = homeFeed.players.get("69afb9b7-cdf7-4be7-909b-d244081e93e1")
+                val firstUser = getFirstKey.asJsonObject
+
+                val profile = firstUser.get("profile")
+                val firstUserProfile = gson.fromJson(profile, Profile::class.java)
+
+                val ranked = firstUser.get("ranked")
+                val firstUserRanked = gson.fromJson(ranked, Ranked::class.java)
+
+                activity?.runOnUiThread {
+                    result_TextView.text = firstUserProfile.p_name
+                    mmr_TextView.text = firstUserRanked.mmr.toString()
+                }
+
             }
 
         })
     }
 }
 class HomeFeed( val status: Int, val foundmatch: Boolean, val requested: String, val players: JsonObject)
-class PlayersFeed(val profile: JsonObject)
+class Profile(val p_name: String, val p_user: String, val p_platform: String, val verified: Boolean)
+class Ranked(val kd: Double, val mmr: Int, val rank: Int)
+
 
 
