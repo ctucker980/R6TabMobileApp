@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.findFragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.r6tabmobileapp.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -37,6 +39,17 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val currentUser = mAuth.currentUser
         updateUI(currentUser)
+
+        var image : String = "https://ubisoft-avatars.akamaized.net/69afb9b7-cdf7-4be7-909b-d244081e93e1/default_146_146.png"
+
+        val requestOptions = RequestOptions()
+            .placeholder(R.drawable.ic_launcher_background)
+            .error(R.drawable.ic_launcher_background)
+
+        Glide.with(view.context)
+            .load(image)
+            .into(view.profile_picture)
+
     }
 
 

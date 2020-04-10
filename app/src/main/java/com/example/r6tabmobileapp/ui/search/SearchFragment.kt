@@ -14,7 +14,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.r6tabmobileapp.R
+import com.example.r6tabmobileapp.api.HomeFeed
+import com.example.r6tabmobileapp.api.Profile
+import com.example.r6tabmobileapp.api.Ranked
+import com.example.r6tabmobileapp.api.User
 import com.google.firebase.database.android.AndroidPlatform
 import com.google.gson.*
 import com.google.gson.annotations.SerializedName
@@ -125,6 +131,7 @@ class SearchFragment : Fragment() {
                             var userKD = itemView.userKD_TextView
                             var userMMR = itemView.userMMR_TextView
                             var userPlatform = itemView.userPlatform_TextView
+                            var userProfilePic = itemView.userProfilePic
                         }
 
                         override fun onCreateViewHolder(
@@ -152,6 +159,14 @@ class SearchFragment : Fragment() {
                                 holder.userMMR.text = "0"
                             }
                             holder.userPlatform.text = items[position]!!.profile.p_platform
+                            var imageurl : String = "https://ubisoft-avatars.akamaized.net/${items[position]!!.profile.p_user}/default_146_146.png"
+
+                            val requestOptions = RequestOptions()
+                                .placeholder(R.drawable.ic_launcher_background)
+                                .error(R.drawable.ic_launcher_background)
+                            Glide.with(holder.itemView.context)
+                                .load(imageurl)
+                                .into(holder.userProfilePic)
                         }
                     }
 
@@ -163,10 +178,6 @@ class SearchFragment : Fragment() {
         })
     }
 }
-class HomeFeed( val status: Int, val foundmatch: Boolean, val requested: String, val players: JsonObject)
-class Profile(val p_name: String, val p_user: String, val p_platform: String, val verified: Boolean)
-class Ranked(val kd: Double, val mmr: String, val rank: String)
-class User(val profile: Profile, val ranked : Ranked)
 
 class TopSpacingItemDecoration(private val padding: Int) : RecyclerView.ItemDecoration(){
     override fun getItemOffsets(
