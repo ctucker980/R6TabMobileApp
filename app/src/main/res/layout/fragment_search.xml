@@ -16,12 +16,12 @@
         app:srcCompat="@drawable/logoimg" />
 
     <ScrollView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -50,14 +50,14 @@
                     android:id="@+id/pc_RadioButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="PC"
+                    android:text="uplay"
                     android:textSize="20dp" />
 
                 <RadioButton
                     android:id="@+id/xbox_radioButton2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Xbox"
+                    android:text="xbl"
                     android:textSize="20dp" />
 
                 <RadioButton
@@ -65,7 +65,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="PSN"
+                    android:text="psn"
                     android:textSize="20dp" />
 
             </RadioGroup>
