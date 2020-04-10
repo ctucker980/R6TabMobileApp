@@ -1,5 +1,6 @@
 package com.example.r6tabmobileapp.ui.search
 
+import android.graphics.Rect
 import android.os.Bundle
 import android.os.Looper
 import android.view.LayoutInflater
@@ -100,13 +101,19 @@ class SearchFragment : Fragment() {
                     } catch (e : java.lang.NullPointerException) {
                         activity?.runOnUiThread { Toast.makeText(activity, "Please Enter Valid Username", Toast.LENGTH_LONG).show() }
                     }
-                } catch (e : com.google.gson.JsonSyntaxException) { 
+                } catch (e : com.google.gson.JsonSyntaxException) {
                     activity?.runOnUiThread { Toast.makeText(activity, "No User Found", Toast.LENGTH_LONG).show() }
                 }
 
                 activity?.runOnUiThread {
                     val recyclerView = recycler_view
-                    recyclerView.layoutManager = LinearLayoutManager(activity)
+                    val topSpacingItemDecoration = TopSpacingItemDecoration(20)
+
+                    recyclerView.apply {
+                        layoutManager = LinearLayoutManager(activity)
+                        addItemDecoration(topSpacingItemDecoration)
+                    }
+
                     class RecyclerViewAdapter(val items: ArrayList<User?>) :
                         RecyclerView.Adapter<RecyclerViewAdapter.CustomViewHolder>() {
                         inner class CustomViewHolder(itemView: View) :
@@ -136,7 +143,11 @@ class SearchFragment : Fragment() {
                         ) {
                             holder.userName.text = items[position]!!.profile.p_name
                             holder.userKD.text = String.format("%.2f", items[position]!!.ranked.kd)
-                            holder.userMMR.text = items[position]!!.ranked.mmr
+                            if (items[position]!!.ranked.mmr.isNotEmpty()) {
+                                holder.userMMR.text = items[position]!!.ranked.mmr
+                            }else {
+                                holder.userMMR.text = "0"
+                            }
                             holder.userPlatform.text = items[position]!!.profile.p_platform
                         }
                     }
@@ -152,3 +163,16 @@ class HomeFeed( val status: Int, val foundmatch: Boolean, val requested: String,
 class Profile(val p_name: String, val p_user: String, val p_platform: String, val verified: Boolean)
 class Ranked(val kd: Double, val mmr: String, val rank: String)
 class User(val profile: Profile, val ranked : Ranked)
+
+class TopSpacingItemDecoration(private val padding: Int) : RecyclerView.ItemDecoration(){
+    override fun getItemOffsets(
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
+        super.getItemOffsets(outRect, view, parent, state)
+        outRect.top = padding
+        outRect.bottom = padding
+    }
+}
