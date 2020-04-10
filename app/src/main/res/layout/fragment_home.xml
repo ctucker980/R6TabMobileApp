@@ -64,15 +64,15 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/userRank_Label"
+                    android:id="@+id/userMMR_Label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Rank: "
+                    android:text="MMR: "
                     android:textSize="14sp" />
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/userMMR_API_Input"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -86,14 +86,14 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textView4"
+                    android:id="@+id/userKD_Label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="K/D: "
                     android:textSize="14sp" />
 
                 <TextView
-                    android:id="@+id/textView5"
+                    android:id="@+id/userKD_API_Input"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

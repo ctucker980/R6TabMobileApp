@@ -62,7 +62,7 @@
                 android:textColor="#FFFFFF" />
 
             <TextView
-                android:id="@+id/userKD_TextView"
+                android:id="@+id/userKD_Label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

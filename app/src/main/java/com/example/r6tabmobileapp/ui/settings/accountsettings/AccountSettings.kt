@@ -1,16 +1,20 @@
 package com.example.r6tabmobileapp.ui.settings.accountsettings
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.WindowId
 import android.widget.EditText
 import android.widget.Toast
 import androidx.core.view.isVisible
 import com.example.r6tabmobileapp.R
+import com.example.r6tabmobileapp.api.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_account_settings.*
+import okhttp3.*
+import java.io.IOException
 
 class AccountSettings : AppCompatActivity() {
     val user = FirebaseAuth.getInstance().currentUser
@@ -18,8 +22,8 @@ class AccountSettings : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account_settings)
 
-        setUserName_Button.setOnClickListener {
-            setUserName_Layout.isVisible = setUserName_Button.isChecked
+        setPlayerId_Button.setOnClickListener {
+            setPlayerId_Layout.isVisible = setPlayerId_Button.isChecked
         }
 
         changePassword_Button.setOnClickListener {
@@ -27,29 +31,73 @@ class AccountSettings : AppCompatActivity() {
         }
 
         setUserNameComfirm_Button.setOnClickListener {
-            val newUserName = findViewById<View>(R.id.setNewUserName_PlainText) as EditText
+            val newUserId = findViewById<View>(R.id.setNewUserName_PlainText) as EditText
 
-            if (newUserName.text.isNotEmpty()) {
-                if (newUserName.text.toString() == user!!.displayName) {
-                    Toast.makeText(this, "Username Already Set To: " + newUserName.text, Toast.LENGTH_LONG).show()
-                } else {
-                    val profileUpdates = UserProfileChangeRequest.Builder()
-                        .setDisplayName(newUserName.text.toString())
-                        .build()
-                    user?.updateProfile(profileUpdates)?.addOnCompleteListener{ task ->
-                        if (task.isSuccessful){
-                            Toast.makeText(this, "Username Has Been Updated To: " + user.displayName, Toast.LENGTH_LONG).show()
-                        }else {
-                            Toast.makeText(this, "Error Setting New Username", Toast.LENGTH_LONG).show()
-                        }
-                    }
-                }
-            } else {
-                newUserName.error = "This Field Needs To Be Filled Out"
-            }
+            fetchJson(newUserId.text.toString())
 
         }
     }
 
+    fun fetchJson(userId: String) {
+        println("GET Request")
+        val url = "https://r6.apitab.com/player/$userId"
 
+
+        val request = Request.Builder().url(url).build()
+
+        val client = OkHttpClient()
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                println("Failed To execute request")
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val body = response?.body?.string()
+                println(body)
+
+                val userList = arrayListOf<User?>()
+
+                try {
+                    val gson = GsonBuilder().create()
+                    val homeFeed = gson.fromJson(body, PlayerFeed::class.java)
+                    try {
+                        val userId = homeFeed.player.get("p_id")
+
+                        if (!user?.displayName.equals(userId.asString)) {
+                            val profileUpdates = UserProfileChangeRequest.Builder()
+                                .setDisplayName(userId.asString)
+                                .build()
+                            user?.updateProfile(profileUpdates)?.addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    runOnUiThread {
+                                        Toast.makeText(
+                                            applicationContext,
+                                            "Username Has Been Updated To: " + user.displayName,
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }
+
+                                } else {
+                                    runOnUiThread {
+                                        Toast.makeText(
+                                            applicationContext,
+                                            "Error Setting New Username",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }
+                                }
+                            }
+                        } else {
+                            runOnUiThread { Toast.makeText(applicationContext, "Id Already Set To This", Toast.LENGTH_LONG).show() }
+                        }
+                    } catch (e: java.lang.NullPointerException) {
+
+                    }
+
+                } catch (e : com.google.gson.JsonSyntaxException) {
+
+                }
+            }
+        })
+    }
 }

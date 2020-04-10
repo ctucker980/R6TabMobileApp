@@ -2,14 +2,11 @@ package com.example.r6tabmobileapp.ui.search
 
 import android.graphics.Rect
 import android.os.Bundle
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
-import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,22 +14,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.r6tabmobileapp.R
-import com.example.r6tabmobileapp.api.HomeFeed
-import com.example.r6tabmobileapp.api.Profile
-import com.example.r6tabmobileapp.api.Ranked
-import com.example.r6tabmobileapp.api.User
-import com.google.firebase.database.android.AndroidPlatform
+import com.example.r6tabmobileapp.api.*
 import com.google.gson.*
-import com.google.gson.annotations.SerializedName
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.fragment_search.view.*
-import kotlinx.android.synthetic.main.user_layout.*
 import kotlinx.android.synthetic.main.user_layout.view.*
 import okhttp3.*
 import java.io.IOException
-import java.lang.reflect.Type
-import java.math.BigDecimal
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -91,7 +79,7 @@ class SearchFragment : Fragment() {
 
                 try {
                     val gson = GsonBuilder().create()
-                    val homeFeed = gson.fromJson(body, HomeFeed::class.java)
+                    val homeFeed = gson.fromJson(body, SearchFeed::class.java)
                     try {
                         val id = homeFeed.players.keySet()
                         for (i in id) {
@@ -128,7 +116,7 @@ class SearchFragment : Fragment() {
                         inner class CustomViewHolder(itemView: View) :
                             RecyclerView.ViewHolder(itemView) {
                             var userName = itemView.userName_TextView
-                            var userKD = itemView.userKD_TextView
+                            var userKD = itemView.userKD_Label
                             var userMMR = itemView.userMMR_TextView
                             var userPlatform = itemView.userPlatform_TextView
                             var userProfilePic = itemView.userProfilePic
