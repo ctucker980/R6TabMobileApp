@@ -34,6 +34,7 @@ import kotlin.collections.ArrayList
 class SearchFragment : Fragment() {
 
     private lateinit var searchViewModel: SearchViewModel
+    var count = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,7 +43,6 @@ class SearchFragment : Fragment() {
     ): View? {
         searchViewModel =
             ViewModelProviders.of(this).get(SearchViewModel::class.java)
-
         val view = inflater.inflate(R.layout.fragment_search, container, false)
         view.search_View.setOnQueryTextListener( object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -109,9 +109,12 @@ class SearchFragment : Fragment() {
                     val recyclerView = recycler_view
                     val topSpacingItemDecoration = TopSpacingItemDecoration(20)
 
+
                     recyclerView.apply {
                         layoutManager = LinearLayoutManager(activity)
-                        addItemDecoration(topSpacingItemDecoration)
+                        if (count < 1) {
+                            addItemDecoration(topSpacingItemDecoration)
+                        }
                     }
 
                     class RecyclerViewAdapter(val items: ArrayList<User?>) :
@@ -154,6 +157,7 @@ class SearchFragment : Fragment() {
 
                     val userAdapter = RecyclerViewAdapter(userList)
                     recyclerView.adapter = userAdapter
+                    ++count
                 }
             }
         })
