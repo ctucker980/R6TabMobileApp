@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.user_layout.view.*
 import okhttp3.*
 import java.io.IOException
 import java.lang.reflect.Type
+import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -84,20 +85,29 @@ class SearchFragment : Fragment() {
                 var profile : JsonElement
                 var userProfile : Profile
 
+                var rank : JsonElement
+                var userRank : Ranked
 
-                val userList = arrayListOf<Profile?>()
+                var user : User
+
+
+                val userList = arrayListOf<User?>()
+                val rankList = arrayListOf<Ranked?>()
 
 
 
                 for (i in Id) {
-                   userKey = homeFeed.players.get(i)
+                    userKey = homeFeed.players.get(i)
                     runUser = userKey.asJsonObject
                     profile = runUser.get("profile")
+                    rank = runUser.get("ranked")
                     userProfile = gson.fromJson(profile, Profile::class.java)
-                    userList.add(userProfile)
+                    userRank = gson.fromJson(rank, Ranked::class.java)
+                    user = User(userProfile, userRank)
+                    userList.add(user)
                 }
 
-               // val profile = firstUser.get("profile")
+                // val profile = firstUser.get("profile")
                 //val firstUserProfile = gson.fromJson(profile, Profile::class.java)
 
                 //val ranked = firstUser.get("ranked")
@@ -109,9 +119,11 @@ class SearchFragment : Fragment() {
 
                     val recyclerView = recycler_view
                     recyclerView.layoutManager = LinearLayoutManager(activity)
-                    class RecyclerViewAdapter( val items : ArrayList<Profile?>): RecyclerView.Adapter<RecyclerViewAdapter.CustomViewHolder>() {
+                    class RecyclerViewAdapter( val items : ArrayList<User?>): RecyclerView.Adapter<RecyclerViewAdapter.CustomViewHolder>() {
                         inner class CustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                             var userName = itemView.userName_TextView
+                            var userKD = itemView.userKD_TextView
+                            var userMMR = itemView.userMMR_TextView
                         }
 
                         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
@@ -125,7 +137,9 @@ class SearchFragment : Fragment() {
                         }
 
                         override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-                            holder.userName.text = items[position]!!.p_name
+                            holder.userName.text = items[position]!!.profile.p_name
+                            holder.userKD.text = String.format("%.2f", items[position]!!.ranked.kd)
+                            holder.userMMR.text = items[position]!!.ranked.mmr
                         }
                     }
 
@@ -139,8 +153,9 @@ class SearchFragment : Fragment() {
 }
 class HomeFeed( val status: Int, val foundmatch: Boolean, val requested: String, val players: JsonObject)
 class Profile(val p_name: String, val p_user: String, val p_platform: String, val verified: Boolean)
-class Ranked(val kd: Double, val mmr: Int, val rank: Int)
+class Ranked(val kd: Double, val mmr: String, val rank: String)
 
+class User(val profile: Profile, val ranked : Ranked)
 
 
 
