@@ -34,9 +34,6 @@ class SearchFragment : Fragment() {
 
     private lateinit var searchViewModel: SearchViewModel
 
-    private val client = OkHttpClient()
-
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -49,11 +46,11 @@ class SearchFragment : Fragment() {
         view.search_View.setOnQueryTextListener( object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (view.pc_RadioButton.isChecked) {
-                    fectchJson(query.toString(), "uplay")
+                    fetchJson(query.toString(), "uplay")
                 } else if (view.xbox_radioButton2.isChecked){
-                    fectchJson(query.toString(), "xbl")
+                    fetchJson(query.toString(), "xbl")
                 } else if (view.psn_radioButton3.isChecked){
-                    fectchJson(query.toString(), "psn")
+                    fetchJson(query.toString(), "psn")
                 } else {
                     Toast.makeText(activity, "Please Select Platform", Toast.LENGTH_SHORT).show()
                 }
@@ -66,9 +63,9 @@ class SearchFragment : Fragment() {
         return view
     }
 
-    fun fectchJson (userurl: String, platform: String) {
+    fun fetchJson (userUrl: String, platform: String) {
         println("GET Request")
-        val url = "https://r6.apitab.com/search/$platform/$userurl"
+        val url = "https://r6.apitab.com/search/$platform/$userUrl"
 
 
         val request = Request.Builder().url(url).build()
@@ -81,83 +78,71 @@ class SearchFragment : Fragment() {
 
             override fun onResponse(call: Call, response: Response) {
                 val body = response?.body?.string()
-
                 println(body)
+
+                val userList = arrayListOf<User?>()
+
                 try {
                     val gson = GsonBuilder().create()
                     val homeFeed = gson.fromJson(body, HomeFeed::class.java)
-                    val userList = arrayListOf<User?>()
-
-                    val Id = homeFeed.players.keySet()
-                    var userKey: JsonElement
-                    var runUser: JsonObject
-                    var profile: JsonElement
-                    var userProfile: Profile
-
-                    var rank: JsonElement
-                    var userRank: Ranked
-
-                    var user: User
-
-
-                    val rankList = arrayListOf<Ranked?>()
-
-                    for (i in Id) {
-                        userKey = homeFeed.players.get(i)
-                        runUser = userKey.asJsonObject
-                        profile = runUser.get("profile")
-                        rank = runUser.get("ranked")
-                        userProfile = gson.fromJson(profile, Profile::class.java)
-                        userRank = gson.fromJson(rank, Ranked::class.java)
-                        user = User(userProfile, userRank)
-                        userList.add(user)
+                    try {
+                        val id = homeFeed.players.keySet()
+                        for (i in id) {
+                            var userKey = homeFeed.players.get(i)
+                            var runUser = userKey.asJsonObject
+                            var profile = runUser.get("profile")
+                            var rank = runUser.get("ranked")
+                            var userProfile = gson.fromJson(profile, Profile::class.java)
+                            var userRank = gson.fromJson(rank, Ranked::class.java)
+                            var user = User(userProfile, userRank)
+                            userList.add(user)
+                        }
+                    } catch (e : java.lang.NullPointerException) {
+                        activity?.runOnUiThread { Toast.makeText(activity, "Please Enter Valid Username", Toast.LENGTH_LONG).show() }
                     }
+                } catch (e : com.google.gson.JsonSyntaxException) { 
+                    activity?.runOnUiThread { Toast.makeText(activity, "No User Found", Toast.LENGTH_LONG).show() }
+                }
 
-                    activity?.runOnUiThread {
-                        val recyclerView = recycler_view
-                        recyclerView.layoutManager = LinearLayoutManager(activity)
-                        class RecyclerViewAdapter(val items: ArrayList<User?>) :
-                            RecyclerView.Adapter<RecyclerViewAdapter.CustomViewHolder>() {
-                            inner class CustomViewHolder(itemView: View) :
-                                RecyclerView.ViewHolder(itemView) {
-                                var userName = itemView.userName_TextView
-                                var userKD = itemView.userKD_TextView
-                                var userMMR = itemView.userMMR_TextView
-                            }
-
-                            override fun onCreateViewHolder(
-                                parent: ViewGroup,
-                                viewType: Int
-                            ): CustomViewHolder {
-                                val view = LayoutInflater.from(parent.context)
-                                    .inflate(R.layout.user_layout, parent, false)
-                                return CustomViewHolder(view)
-                            }
-
-                            override fun getItemCount(): Int {
-                                return items.size
-                            }
-
-                            override fun onBindViewHolder(
-                                holder: CustomViewHolder,
-                                position: Int
-                            ) {
-                                holder.userName.text = items[position]!!.profile.p_name
-                                holder.userKD.text =
-                                    String.format("%.2f", items[position]!!.ranked.kd)
-                                holder.userMMR.text = items[position]!!.ranked.mmr
-                            }
+                activity?.runOnUiThread {
+                    val recyclerView = recycler_view
+                    recyclerView.layoutManager = LinearLayoutManager(activity)
+                    class RecyclerViewAdapter(val items: ArrayList<User?>) :
+                        RecyclerView.Adapter<RecyclerViewAdapter.CustomViewHolder>() {
+                        inner class CustomViewHolder(itemView: View) :
+                            RecyclerView.ViewHolder(itemView) {
+                            var userName = itemView.userName_TextView
+                            var userKD = itemView.userKD_TextView
+                            var userMMR = itemView.userMMR_TextView
+                            var userPlatform = itemView.userPlatform_TextView
                         }
 
-                        val userAdapter = RecyclerViewAdapter(userList)
-                        recyclerView.adapter = userAdapter
+                        override fun onCreateViewHolder(
+                            parent: ViewGroup,
+                            viewType: Int
+                        ): CustomViewHolder {
+                            val view = LayoutInflater.from(parent.context)
+                                .inflate(R.layout.user_layout, parent, false)
+                            return CustomViewHolder(view)
+                        }
+
+                        override fun getItemCount(): Int {
+                            return items.size
+                        }
+
+                        override fun onBindViewHolder(
+                            holder: CustomViewHolder,
+                            position: Int
+                        ) {
+                            holder.userName.text = items[position]!!.profile.p_name
+                            holder.userKD.text = String.format("%.2f", items[position]!!.ranked.kd)
+                            holder.userMMR.text = items[position]!!.ranked.mmr
+                            holder.userPlatform.text = items[position]!!.profile.p_platform
+                        }
                     }
 
-                }
-                catch (e : com.google.gson.JsonSyntaxException) {
-                    activity?.runOnUiThread {
-                        Toast.makeText(activity, "No User Found", Toast.LENGTH_LONG).show()
-                    }
+                    val userAdapter = RecyclerViewAdapter(userList)
+                    recyclerView.adapter = userAdapter
                 }
             }
         })
