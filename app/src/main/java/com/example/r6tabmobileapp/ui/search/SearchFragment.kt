@@ -18,6 +18,7 @@ import okhttp3.*
 import java.io.IOException
 import java.lang.reflect.Type
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 // Search Method
@@ -54,6 +55,7 @@ class SearchFragment : Fragment() {
         println("GET Request")
         val url = "https://r6.apitab.com/search/uplay/$userurl"
 
+
         val request = Request.Builder().url(url).build()
 
         val client = OkHttpClient()
@@ -64,23 +66,40 @@ class SearchFragment : Fragment() {
 
             override fun onResponse(call: Call, response: Response) {
                 val body = response?.body?.string()
+
                 println(body)
 
                 val gson = GsonBuilder().create()
                 val homeFeed = gson.fromJson(body, HomeFeed::class.java)
 
-                val getFirstKey = homeFeed.players.get("69afb9b7-cdf7-4be7-909b-d244081e93e1")
-                val firstUser = getFirstKey.asJsonObject
+                //val getFirstKey = homeFeed.players.get("69afb9b7-cdf7-4be7-909b-d244081e93e1")
+                //val firstUser = getFirstKey.asJsonObject
 
-                val profile = firstUser.get("profile")
-                val firstUserProfile = gson.fromJson(profile, Profile::class.java)
+               val Id = homeFeed.players.keySet()
+                var userKey : JsonElement
+                var runUser : JsonObject
+                var profile : JsonElement
+                var userProfile : Profile
+                val userList = mutableListOf<Profile>()
 
-                val ranked = firstUser.get("ranked")
-                val firstUserRanked = gson.fromJson(ranked, Ranked::class.java)
+
+                for (i in Id) {
+                   userKey = homeFeed.players.get(i)
+                    runUser = userKey.asJsonObject
+                    profile = runUser.get("profile")
+                    userProfile = gson.fromJson(profile, Profile::class.java)
+                    userList += userProfile
+                }
+
+               // val profile = firstUser.get("profile")
+                //val firstUserProfile = gson.fromJson(profile, Profile::class.java)
+
+                //val ranked = firstUser.get("ranked")
+                //val firstUserRanked = gson.fromJson(ranked, Ranked::class.java)
 
                 activity?.runOnUiThread {
-                    result_TextView.text = firstUserProfile.p_name
-                    mmr_TextView.text = firstUserRanked.mmr.toString()
+                   // result_TextView.text = firstUserProfile.p_name
+                    //mmr_TextView.text = firstUserRanked.mmr.toString()
                 }
 
             }
