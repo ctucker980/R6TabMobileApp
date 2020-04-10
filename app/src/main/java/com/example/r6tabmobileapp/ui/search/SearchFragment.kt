@@ -6,14 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.TextView
+import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.r6tabmobileapp.R
 import com.google.gson.*
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.fragment_search.view.*
-import kotlinx.android.synthetic.main.fragment_search.view.result_TextView
+import kotlinx.android.synthetic.main.user_layout.*
+import kotlinx.android.synthetic.main.user_layout.view.*
 import okhttp3.*
 import java.io.IOException
 import java.lang.reflect.Type
@@ -47,7 +51,6 @@ class SearchFragment : Fragment() {
                 return true
             }
         })
-
         return view
     }
 
@@ -80,7 +83,10 @@ class SearchFragment : Fragment() {
                 var runUser : JsonObject
                 var profile : JsonElement
                 var userProfile : Profile
-                val userList = mutableListOf<Profile>()
+
+
+                val userList = arrayListOf<Profile?>()
+
 
 
                 for (i in Id) {
@@ -88,7 +94,7 @@ class SearchFragment : Fragment() {
                     runUser = userKey.asJsonObject
                     profile = runUser.get("profile")
                     userProfile = gson.fromJson(profile, Profile::class.java)
-                    userList += userProfile
+                    userList.add(userProfile)
                 }
 
                // val profile = firstUser.get("profile")
@@ -98,18 +104,43 @@ class SearchFragment : Fragment() {
                 //val firstUserRanked = gson.fromJson(ranked, Ranked::class.java)
 
                 activity?.runOnUiThread {
-                   // result_TextView.text = firstUserProfile.p_name
+                    // result_TextView.text = firstUserProfile.p_name
                     //mmr_TextView.text = firstUserRanked.mmr.toString()
+
+                    val recyclerView = recycler_view
+                    recyclerView.layoutManager = LinearLayoutManager(activity)
+                    class RecyclerViewAdapter( val items : ArrayList<Profile?>): RecyclerView.Adapter<RecyclerViewAdapter.CustomViewHolder>() {
+                        inner class CustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+                            var userName = itemView.userName_TextView
+                        }
+
+                        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
+                            val view = LayoutInflater.from(parent.context)
+                                .inflate(R.layout.user_layout, parent, false)
+                            return CustomViewHolder(view)
+                        }
+
+                        override fun getItemCount(): Int {
+                            return items.size
+                        }
+
+                        override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
+                            holder.userName.text = items[position]!!.p_name
+                        }
+                    }
+
+                    val userAdapter = RecyclerViewAdapter(userList)
+                    recyclerView.adapter = userAdapter
+
                 }
-
             }
-
         })
     }
 }
 class HomeFeed( val status: Int, val foundmatch: Boolean, val requested: String, val players: JsonObject)
 class Profile(val p_name: String, val p_user: String, val p_platform: String, val verified: Boolean)
 class Ranked(val kd: Double, val mmr: Int, val rank: Int)
+
 
 
 
