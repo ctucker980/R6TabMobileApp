@@ -18,6 +18,7 @@ import java.io.IOException
 
 class AccountSettings : AppCompatActivity() {
     val user = FirebaseAuth.getInstance().currentUser
+    val auth = FirebaseAuth.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account_settings)
@@ -27,14 +28,16 @@ class AccountSettings : AppCompatActivity() {
         }
 
         changePassword_Button.setOnClickListener {
-            changePassword_Layout.isVisible = changePassword_Button.isChecked
+            val emailAddress = user?.email
+            auth.sendPasswordResetEmail(emailAddress.toString()).addOnCompleteListener {task -> if (task.isSuccessful) {
+                    runOnUiThread { Toast.makeText(applicationContext, "Password Rest Sent To Your Email", Toast.LENGTH_LONG).show() }
+                }
+            }
         }
 
         setUserNameComfirm_Button.setOnClickListener {
             val newUserId = findViewById<View>(R.id.setNewUserName_PlainText) as EditText
-
             fetchJson(newUserId.text.toString())
-
         }
     }
 
@@ -55,8 +58,6 @@ class AccountSettings : AppCompatActivity() {
                 val body = response?.body?.string()
                 println(body)
 
-                val userList = arrayListOf<User?>()
-
                 try {
                     val gson = GsonBuilder().create()
                     val homeFeed = gson.fromJson(body, PlayerFeed::class.java)
@@ -72,7 +73,7 @@ class AccountSettings : AppCompatActivity() {
                                     runOnUiThread {
                                         Toast.makeText(
                                             applicationContext,
-                                            "Username Has Been Updated To: " + user.displayName,
+                                            "Player Id Has Been Updated To: " + user.displayName,
                                             Toast.LENGTH_LONG
                                         ).show()
                                     }
@@ -81,7 +82,7 @@ class AccountSettings : AppCompatActivity() {
                                     runOnUiThread {
                                         Toast.makeText(
                                             applicationContext,
-                                            "Error Setting New Username",
+                                            "Error Setting Player Id",
                                             Toast.LENGTH_LONG
                                         ).show()
                                     }
@@ -91,9 +92,10 @@ class AccountSettings : AppCompatActivity() {
                             runOnUiThread { Toast.makeText(applicationContext, "Id Already Set To This", Toast.LENGTH_LONG).show() }
                         }
                     } catch (e: java.lang.NullPointerException) {
-
+                        runOnUiThread {
+                            Toast.makeText(applicationContext, "Please Enter Valid Player Id", Toast.LENGTH_LONG).show()
+                        }
                     }
-
                 } catch (e : com.google.gson.JsonSyntaxException) {
 
                 }

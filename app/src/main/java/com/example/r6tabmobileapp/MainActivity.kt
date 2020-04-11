@@ -63,10 +63,14 @@ class MainActivity : AppCompatActivity() {
             mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener (this,
                 OnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        val intent = Intent(this, dashboard::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                        startActivity(intent)
-                        Toast.makeText(this, "Successfully Logged In", Toast.LENGTH_SHORT).show()
+                        if (mAuth.currentUser!!.isEmailVerified) {
+                            val intent = Intent(this, dashboard::class.java)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                            startActivity(intent)
+                            Toast.makeText(this, "Successfully Logged In", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(this, "Please Verify Email Address", Toast.LENGTH_LONG).show()
+                        }
                     } else {
                         Toast.makeText(this, "Please Enter Valid Email & Password", Toast.LENGTH_SHORT).show()
                     }
@@ -83,10 +87,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateUI(user: FirebaseUser?) {
         if (user != null) {
-            startActivity(Intent(this, dashboard::class.java))
+            if (user.isEmailVerified) {
+                startActivity(Intent(this, dashboard::class.java))
+            }
         }
     }
-
 }
 
 

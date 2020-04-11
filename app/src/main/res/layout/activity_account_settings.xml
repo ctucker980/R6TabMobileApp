@@ -41,49 +41,10 @@
             android:text="set" />
     </LinearLayout>
 
-    <ToggleButton
+    <Button
         android:id="@+id/changePassword_Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:checked="false"
-        android:text="ToggleButton"
-        android:textOff="Change Password"
-        android:textOn="Change Password" />
-
-    <LinearLayout
-        android:id="@+id/changePassword_Layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="gone">
-
-        <EditText
-            android:id="@+id/editText"
-            android:layout_width="173dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="Password"
-            android:inputType="textPersonName" />
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Change" />
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/changeEmailAddress_Button"
-        android:layout_width="160dp"
-        android:layout_height="wrap_content"
-        android:text="Change Email Address" />
-
-    <Button
-        android:id="@+id/verifyEmailAddress_Button"
-        android:layout_width="160dp"
-        android:layout_height="wrap_content"
-        android:text="Verify Email Address" />
+        android:text="Reset Password" />
 
 </LinearLayout>

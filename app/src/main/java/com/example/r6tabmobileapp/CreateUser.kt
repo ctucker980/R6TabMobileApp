@@ -41,8 +41,14 @@ class CreateUser : AppCompatActivity() {
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        val user = auth.currentUser
-                        Toast.makeText(this, "Authentication Successful", Toast.LENGTH_SHORT).show()
+                        var user = auth.currentUser
+
+                        user?.sendEmailVerification()?.addOnCompleteListener {task ->
+                            if (task.isSuccessful) {
+                                Toast.makeText(applicationContext, "Verify Email Has Sent", Toast.LENGTH_LONG).show()
+                            }
+                        }
+                        //Toast.makeText(this, "Authentication Successful", Toast.LENGTH_SHORT).show()
                         updateUI(user)
                     } else {
                         Toast.makeText(this, "Authentication failed", Toast.LENGTH_SHORT).show()
@@ -53,7 +59,7 @@ class CreateUser : AppCompatActivity() {
 
     private fun updateUI(user: FirebaseUser?) {
         if (user != null) {
-            startActivity(Intent(this, dashboard::class.java))
+            startActivity(Intent(this, MainActivity::class.java))
         }
     }
 }
