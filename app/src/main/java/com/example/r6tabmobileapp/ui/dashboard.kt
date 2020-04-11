@@ -12,9 +12,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.view.Menu
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.r6tabmobileapp.R
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.fragment_home.*
 
 class dashboard : AppCompatActivity() {
 
@@ -53,6 +57,16 @@ class dashboard : AppCompatActivity() {
             val userEmail : TextView = findViewById(R.id.email)
             val email = user.email
             userEmail.text = email
+
+            var imageUrl : String = "https://ubisoft-avatars.akamaized.net/${user.displayName.toString()}/default_146_146.png"
+            val requestOptions = RequestOptions()
+                .placeholder(R.drawable.ic_launcher_background)
+                .error(R.drawable.ic_launcher_background)
+            val profileImage: ImageView = findViewById(R.id.userProfileImage)
+
+            Glide.with(this)
+                .load(imageUrl)
+                .into(profileImage)
         }
         menuInflater.inflate(R.menu.dashboard, menu)
         return true
