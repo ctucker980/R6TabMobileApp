@@ -1,12 +1,14 @@
 Login:
 //This Account Has Been Verifed & Can Be Used To Login
-user Email : c.tucker980@gmail.com
+user Email : c.tucker980@mybvc.ca
 user Password : admin000
 
 //NOTE:
 You Can Create New User Account
 Email Address has to be a real Email
 A verify Email will be sent to the email Address
+
+DUE TO UPDATE ON THE API, THIS APP WILL NOT WORK: WAITING ON KEY FROM API CREATOR
 
 
 Profile:
